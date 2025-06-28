@@ -4,7 +4,7 @@ import lines from "../assets/homepage-lines.svg";
 
 export default function LocationSection() {
   return (
-    <div className="flex flex-col-reverse md:flex-row md:items-start justify-between pt-8 md:py-10 bg-white md:relative md:z-0">
+    <div id="location" className="flex flex-col-reverse md:flex-row md:items-start justify-between pt-8 md:py-10 bg-white md:relative md:z-0 scroll-mt-[70px]">
       {/* Map Image - bottom on mobile, left on md+ */}
       <div className="w-full md:w-1/2 mt-10 md:mt-0 px-5 md:px-10">
         <img src={locationMap} alt="Location Map" className="w-full h-auto" />

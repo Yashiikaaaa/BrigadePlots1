@@ -26,7 +26,7 @@ const plotData = [
 
 export default function PlotDetailsPage({ openModal }: PlotDetailsProp) {
   return (
-    <div className="bg-[#f2fbe7] w-full py-5 flex flex-col md:pb-10 overflow-hidden md:relative md:z-1">
+    <div id="floorplan" className="bg-[#f2fbe7] w-full py-5 flex flex-col md:pb-10 overflow-hidden md:relative md:z-1 scroll-mt-[100px]">
       {/* Section Heading */}
       <h2 className="text-[#26650B] font-semibold text-base md:text-xl border-3 border-[#26650B] px-8 py-1 rounded-full mb-2 self-start mx-6 md:mx-30 md:my-8 md:mb-0">
         PLOT DETAILS
@@ -48,7 +48,7 @@ export default function PlotDetailsPage({ openModal }: PlotDetailsProp) {
             el: ".custom-pagination",
             clickable: true,
           }}
-          className="pb-6 pr-6 z-100"
+          className="pb-6 pr-6 z-7"
         >
           {plotData.map((plot, index) => (
             <SwiperSlide
