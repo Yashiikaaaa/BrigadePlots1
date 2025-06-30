@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import brigade from "../assets/brigade.svg";
 import menuIcon from "../assets/header-menu.svg"; // image to show when menu is closed
 
@@ -6,16 +6,16 @@ export function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'Overview', href: '#overview' },
-    { label: 'Floor Plan', href: '#floorplan' },
-    { label: 'Location', href: '#location' },
-    { label: 'Amenities', href: '#amenities' },
-    { label: 'Gallery', href: '#gallery' },
+    { label: "Home", href: "#home" },
+    { label: "Overview", href: "#overview" },
+    { label: "Floor Plan", href: "#floorplan" },
+    { label: "Location", href: "#location" },
+    { label: "Amenities", href: "#amenities" },
+    { label: "Gallery", href: "#gallery" },
   ];
 
   return (
-    <header className="w-full bg-white border-white px-4 md:px-14">
+    <header className="fixed top-0 left-0 w-full bg-white border-white px-4 md:px-14 z-20">
       <div className="h-[69px] flex items-center justify-between">
         {/* Left: Logo */}
         <div className="flex items-center space-x-2 mr-28">
@@ -29,14 +29,21 @@ export function Header() {
         {/* Desktop Nav */}
         <nav className="hidden md:flex space-x-4 lg:space-x-16 text-[#26650B] text-sm md:text-base font-base md:pr-10 whitespace-nowrap">
           {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className="hover:underline">
+            <a
+              key={link.href}
+              href={link.href}
+              className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#26650B] after:transition-all after:duration-300 hover:after:w-full"
+            >
               {link.label}
             </a>
           ))}
         </nav>
 
         {/* Mobile Menu Toggle */}
-        <div className="md:hidden cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+        <div
+          className="md:hidden cursor-pointer"
+          onClick={() => setIsOpen(!isOpen)}
+        >
           {!isOpen ? (
             <img src={menuIcon} alt="Menu Icon" className="w-6 h-6 mr-2" />
           ) : (
@@ -59,17 +66,19 @@ export function Header() {
 
       {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="md:hidden flex flex-col space-y-2 pb-4 text-green-900 text-sm font-base">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="hover:underline"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
+        <div className="absolute top-[64px] left-0 w-full bg-white shadow-lg z-40 animate-fade-down backdrop-blur-sm ">
+          <div className="flex flex-col px-6 py-4 gap-4 text-green-900 text-base font-medium">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="hover:underline transition-colors duration-200"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
       )}
     </header>

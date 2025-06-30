@@ -8,7 +8,7 @@ interface HomePageProps {
 
 function HomePage({ openModal }: HomePageProps) {
   return (
-    <div className="bg-[#F2FFED] min-h-screen font-sans text-green-900 overflow-x-hidden overflow-y-hidden md:relative md:z-0">
+    <div id="home" className="bg-[#F2FFED] min-h-screen font-sans text-green-900 overflow-x-hidden overflow-y-hidden md:relative md:z-0 pt-[69px] md:pt-[80px] scroll-mt-[80px]">
       {/* Heading */}
       <h1 className="text-2xl md:text-2xl md:text-3xl lg:text-4xl font-bold text-left text-[#26650B] px-4 md:px-[77px] pt-6">
         WELCOME TO ELEVATED LIVING <br className="md:hidden md:block" />

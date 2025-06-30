@@ -1,39 +1,76 @@
 import React, { useEffect, useState } from "react";
 import closeIcon from "../assets/close.svg";
 import modalImage from "../assets/modal-image.svg";
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import { FormAlert } from "./FormAlert";
+import ReactGA from "react-ga4";
 
 interface EnquiryModalProps {
   isOpen: boolean;
   closeModal: () => void;
 }
 
-const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [name, setName] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [contactError, setContactError] = useState("");
-  const [submittedNumbers, setSubmittedNumbers] = useState<Set<string>>(new Set());
-  const [isSubmitting, setIsSubmitting] = useState(false); // New state for loading
-  const [submissionStatus, setSubmissionStatus] = useState(""); // New state for success/error message
+// Declare global gtag to avoid TS errors
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+  interface ImportMeta {
+    env: {
+      [key: string]: string | boolean | undefined;
+      VITE_GA_MEASUREMENT_ID?: string;
+    };
+  }
+}
 
-  // Update `isMobile` based on screen size
+const trackingId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+
+if (trackingId) {
+  ReactGA.initialize(trackingId);
+}
+
+const gtag_report_conversion = (url?: string) => {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    const callback = () => {
+      if (url) window.location.href = url;
+    };
+    window.gtag("event", "conversion", {
+      send_to: "AW-16460421460/zvkSCLj3m6caENSy-Kg9",
+      value: 1.0,
+      currency: "INR",
+      event_callback: callback,
+    });
+  }
+};
+
+const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const [contactNumber, setContactNumber] = useState<string>("");
+  const [nameError, setNameError] = useState<string>("");
+  const [contactError, setContactError] = useState<string>("");
+  const [submittedNumbers, setSubmittedNumbers] = useState<Set<string>>(new Set());
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submissionStatus, setSubmissionStatus] = useState<string>("");
+  const [utmParams, setUtmParams] = useState({
+    utmSource: "",
+    utmMedium: "",
+    utmCampaign: "",
+  });
+
   useEffect(() => {
     const updateIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    updateIsMobile(); // Run on mount
-    window.addEventListener("resize", updateIsMobile); // Update on resize
-
+    updateIsMobile();
+    window.addEventListener("resize", updateIsMobile);
     return () => {
-      window.removeEventListener("resize", updateIsMobile); // Cleanup
+      window.removeEventListener("resize", updateIsMobile);
     };
   }, []);
 
-  // Clear form state function
   const clearFormState = () => {
     setName("");
     setContactNumber("");
@@ -41,13 +78,11 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
     setContactError("");
   };
 
-  // Enhanced close modal function
   const handleCloseModal = () => {
     clearFormState();
     closeModal();
   };
 
-  // Input validation functions
   const validateName = (value: string) => {
     if (!value.trim()) {
       setNameError("Name is required");
@@ -71,9 +106,15 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
       return false;
     }
 
-    // Check for duplicate entry
     if (submittedNumbers.has(value)) {
       setContactError("This number has already been submitted.");
+      return false;
+    }
+
+    const digits = value.replace(/\D/g, "");
+
+    if (digits.length < 10 || digits.length > 15) {
+      setContactError("Please enter a valid phone number.");
       return false;
     }
 
@@ -86,10 +127,34 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
     if (nameError) validateName(value);
   };
 
-  const handleContactChange = (value: string) => {
-    setContactNumber(value);
-    if (contactError) validateContactNumber(value);
+  const handleContactChange = (value?: string) => {
+    setContactNumber(value || "");
+    if (contactError) validateContactNumber(value || "");
   };
+
+  const getUTMParams = () => {
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get("utmSource");
+    const medium = params.get("utmMedium");
+    const campaign = params.get("utmCampaign");
+
+    ReactGA.send({
+      hitType: "pageview",
+      utm_source: source,
+      utm_medium: medium,
+      utm_campaign: campaign,
+    });
+
+    return {
+      utmSource: source || "",
+      utmMedium: medium || "",
+      utmCampaign: campaign || "",
+    };
+  };
+
+  useEffect(() => {
+    setUtmParams(getUTMParams());
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,53 +164,48 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
 
     if (!isNameValid || !isContactValid) return;
 
-    setIsSubmitting(true); // Set loading state
-    setSubmissionStatus(""); // Reset submission status
+    setIsSubmitting(true);
+    setSubmissionStatus("");
 
     const payload = {
       name: name.trim().toLowerCase(),
-      phonenumber: contactNumber, // Using full international phone number
+      phonenumber: contactNumber,
       campaign: true,
       projectId: "P031-A1",
       projectName: "brigade plot malur",
       currentAgent: "yasswanth@truestate.in",
       utmDetails: {
-        source: null,
-        medium: null,
-        campaign: null,
+        source: utmParams.utmSource || null,
+        medium: utmParams.utmMedium || null,
+        campaign: utmParams.utmCampaign || null,
       },
     };
 
     try {
-      const response = await fetch(
-        "https://handlemultiplecampaigndata-66bpoanwxq-uc.a.run.app",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch("https://handlemultiplecampaigndata-66bpoanwxq-uc.a.run.app", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       const result = await response.json();
       console.log("Form submitted successfully:", result);
 
-      // Add the phone number to the set to prevent duplicates
-      setSubmittedNumbers(prev => new Set(prev.add(contactNumber)));
+      gtag_report_conversion();
 
-      // ✅ Show success message and reset submission state
-      setSubmissionStatus("Form submitted successfully!");
-      setIsSubmitting(false); // Reset loading state
-      handleCloseModal(); // Close the modal after submission
+      setSubmittedNumbers((prev) => new Set(prev).add(contactNumber));
+      setSubmissionStatus("We have successfully received your information. Expect to hear from us shortly!");
     } catch (error) {
       console.error("Submission error:", error);
       setSubmissionStatus("Something went wrong. Please try again later.");
-      setIsSubmitting(false); // Reset loading state
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  if (!isOpen) return null; // Don't render the modal if it's not open
+  if (!isOpen) return null;
 
   return (
     <div
@@ -153,12 +213,10 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
       onClick={handleCloseModal}
     >
       {isMobile ? (
-        // Mobile Modal
         <div
           className="bg-white rounded-2xl p-6 w-[95%] max-w-[400px] relative pt-10"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close button */}
           <img
             src={closeIcon}
             alt="close"
@@ -166,7 +224,6 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
             onClick={handleCloseModal}
           />
 
-          {/* Title */}
           <div className="text-center mb-8 pt-4">
             <h2 className="text-lg font-semibold text-gray-800 leading-tight">
               Know more about Brigade Plots Malur.
@@ -175,16 +232,13 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
             </h2>
           </div>
 
-          {/* Form */}
           <form className="space-y-4" onSubmit={handleSubmit}>
-            {/* Name Field */}
             <div>
               <input
                 type="text"
                 placeholder="Name*"
                 value={name}
                 onChange={(e) => handleNameChange(e.target.value)}
-                onBlur={() => validateName(name)}
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 text-black font-semibold ${
                   nameError
                     ? "border-red-500 focus:ring-red-500"
@@ -197,31 +251,28 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
               )}
             </div>
 
-            {/* Contact Number Field */}
             <div>
               <PhoneInput
                 international
                 defaultCountry="IN"
                 value={contactNumber}
                 onChange={handleContactChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-1 text-black font-semibold ${
-                  contactError
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:ring-black focus:border-transparent"
+                className={`w-full px-4 py-3 border rounded-lg text-base input-phone-number border border-gray-300 ${
+                  contactError ? "border-red-500" : ""
                 }`}
                 required
               />
+
               {contactError && (
                 <p className="text-red-500 text-sm mt-1">{contactError}</p>
               )}
             </div>
 
-            {/* Submit Button */}
             <div className="pt-4 flex justify-center">
               <button
                 type="submit"
                 className="bg-green-600 text-white py-3 px-20 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200"
-                disabled={isSubmitting} // Disable button while submitting
+                disabled={isSubmitting}
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
               </button>
@@ -236,12 +287,10 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
           )}
         </div>
       ) : (
-        // Desktop Modal
         <div
           className="bg-white rounded-lg overflow-hidden w-[90%] max-w-[1000px] flex"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Left side - Image */}
           <div className="w-1/2">
             <img
               src={modalImage}
@@ -250,9 +299,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
             />
           </div>
 
-          {/* Right side - Form */}
           <div className="w-1/2 p-8 relative flex flex-col justify-center">
-            {/* Close button */}
             <button
               onClick={handleCloseModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 p-1 cursor-pointer"
@@ -272,23 +319,19 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
               </svg>
             </button>
 
-            {/* Title */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-gray-800 leading-tight">
                 Know more about Brigade Plots? Enquire now!
               </h2>
             </div>
 
-            {/* Form */}
             <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* Name Field */}
               <div className="px-20">
                 <input
                   type="text"
                   placeholder="Name*"
                   value={name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  onBlur={() => validateName(name)}
                   className={`w-full px-4 py-2 border focus:outline-none focus:ring-1 text-black text-base ${
                     nameError
                       ? "border-red-500 focus:ring-red-500"
@@ -301,31 +344,28 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
                 )}
               </div>
 
-              {/* Contact Number Field */}
               <div className="px-20">
                 <PhoneInput
                   international
                   defaultCountry="IN"
                   value={contactNumber}
                   onChange={handleContactChange}
-                  className={`w-full px-4 py-2 border focus:outline-none focus:ring-1 text-black text-base ${
-                    contactError
-                      ? "border-red-500 focus:ring-red-500"
-                      : "border-gray-300 focus:ring-black focus:border-transparent"
+                  className={`w-full px-4 py-2 text-base input-phone-number border border-gray-300 ${
+                    contactError ? "border-red-500" : ""
                   }`}
                   required
                 />
+
                 {contactError && (
                   <p className="text-red-500 text-sm mt-1">{contactError}</p>
                 )}
               </div>
 
-              {/* Submit Button */}
               <div className="pt-4 flex justify-center">
                 <button
                   type="submit"
                   className="bg-[#008849] text-white py-2 px-12 rounded-xl font-medium text-base hover:bg-green-700 transition-colors duration-200"
-                  disabled={isSubmitting} // Disable button while submitting
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
@@ -340,6 +380,14 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
             )}
           </div>
         </div>
+      )}
+
+      {/* ✅ Shared FormAlert rendered outside the modal content box */}
+      {submissionStatus && (
+        <FormAlert
+          message={submissionStatus}
+          onClose={() => setSubmissionStatus("")}
+        />
       )}
     </div>
   );
