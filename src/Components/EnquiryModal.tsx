@@ -257,7 +257,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
                 defaultCountry="IN"
                 value={contactNumber}
                 onChange={handleContactChange}
-                className={`w-full px-4 py-3 border rounded-lg text-base input-phone-number border border-gray-300 ${
+                className={`w-full px-4 py-3  rounded-lg text-base input-phone-number border border-gray-300 ${
                   contactError ? "border-red-500" : ""
                 }`}
                 required
@@ -278,6 +278,13 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
               </button>
             </div>
           </form>
+
+          {/* Submission Status (Banner) */}
+          {submissionStatus && (
+            <div className="mt-4 text-center text-sm text-green-600">
+              {submissionStatus}
+            </div>
+          )}
         </div>
       ) : (
         <div
@@ -364,6 +371,13 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
                 </button>
               </div>
             </form>
+
+            {/* Submission Status (Banner) */}
+            {submissionStatus && (
+              <div className="mt-4 text-center text-sm text-green-600">
+                {submissionStatus}
+              </div>
+            )}
           </div>
         </div>
       )}
