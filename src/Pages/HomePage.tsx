@@ -79,11 +79,11 @@ function HomePage({ openModal }: HomePageProps) {
       {/* Footer Contact */}
 
       <a
-        href="tel:+918919456501"
+        href="tel:+918123130034"
         className="bg-green-900 text-white text-center py-4 mt-10 flex justify-center items-center gap-2 rounded-none md:rounded-full px-4 cursor-pointer"
       >
         <img src={phoneIcon} alt="Phone" className="w-7 h-7 md:w-10 md:h-10" />
-        <span className="text-lg md:text-3xl font-bold">+91 8919456501</span>
+        <span className="text-lg md:text-3xl font-bold">+91 8123130034</span>
       </a>
     </div>
   );
