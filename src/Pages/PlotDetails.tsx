@@ -24,7 +24,7 @@ const plotData = [
 
 export default function PlotDetailsPage({ openModal }: PlotDetailsProp) {
   return (
-    <div id="floorplan" className="bg-[#f2fbe7] w-full py-10 px-10 flex flex-col items-center md:items-start z-10">
+    <div id="floorplan" className="bg-[#f2fbe7] w-full py-10 px-10 flex flex-col items-center md:items-start z-10 scroll-mt-16">
       {/* Section Heading */}
       <h2 className="text-[#26650B] font-semibold text-base md:text-xl border-3 border-[#26650B] px-8 py-1 mx-10 rounded-full mb-6">
         PLOT DETAILS

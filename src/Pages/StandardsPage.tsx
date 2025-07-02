@@ -19,7 +19,7 @@ const bottomRow = [
 
 const StandardsPage = () => {
   return (
-    <div id="amenities" className="bg-[#F2FFED] w-full px-6 py-10 scroll-mt-[70px]">
+    <div id="amenities" className="bg-[#F2FFED] w-full px-6 py-10 scroll-mt-16">
       <h1 className="text-2xl md:text-3xl font-bold text-green-800 text-left mb-10 leading-tight md:px-12 ">
         THE NEW STANDARD IN<br className='md:hidden'/>LUXURY
       </h1>

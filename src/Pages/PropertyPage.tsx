@@ -8,7 +8,7 @@ interface PropertyPageProps {
 
 export default function PropertyPage({ openModal }: PropertyPageProps) {
   return (
-    <div id="overview" className="w-full bg-white overflow-hidden md:py-14 md:relative md:z-0 scroll-mt-[800px]">
+    <div id="overview" className="scroll-mt-24 w-full bg-white overflow-hidden md:py-14 md:relative md:z-0 ">
       <div className="flex flex-col md:flex-row items-start mx-auto md:z-1">
         <img
           src={lines}

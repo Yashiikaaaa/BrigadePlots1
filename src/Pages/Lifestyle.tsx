@@ -14,7 +14,7 @@ const images = [image1, image2, image3, image4];
 function LifestylePage() {
   return (
     <>
-      <div id="gallery" className="bg-white w-full md:mb-10 mb-6 md:relative md:-z-1 scroll-mt-[70px]">
+      <div id="gallery" className="bg-white w-full md:mb-10 mb-6 md:relative md:-z-1 scroll-mt-16">
         <p className="md:pl-60 md:pt-10 pt-6 text-2xl text-left font-bold text-[#26650B] mb-6 md:mb-12 px-6 md:px-0 -z-1">
           A 360° LIFESTYLE
         </p>
