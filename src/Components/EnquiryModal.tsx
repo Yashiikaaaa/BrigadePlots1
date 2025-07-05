@@ -169,7 +169,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
 
     const payload = {
       name: name.trim().toLowerCase(),
-      phonenumber: contactNumber,
+      phoneNumber: contactNumber,
       campaign: true,
       projectId: "P031-A1",
       projectName: "brigade plot malur",
@@ -182,7 +182,7 @@ const EnquiryModal: React.FC<EnquiryModalProps> = ({ isOpen, closeModal }) => {
     };
 
     try {
-      const response = await fetch("https://handlemultiplecampaigndata-66bpoanwxq-uc.a.run.app", {
+      const response = await fetch("https://googleleadsserver.onrender.com/handleMultipleCampaignData", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
