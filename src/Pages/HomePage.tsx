@@ -68,7 +68,7 @@ function HomePage({ openModal }: HomePageProps) {
           <div className="col-span-2 md:ml-0 mt-2 md:mt-4 flex justify-center md:justify-start">
             <button
               onClick={openModal}
-              className="cursor-pointer px-12 md:px-20 py-2 bg-black text-white rounded-xl text-base font-semibold transition-transform duration-300 hover:scale-105"
+              className="cursor-pointer px-12 md:px-20 py-2 bg-black text-white rounded-xl text-base font-semibold transition-transform duration-300 hover:scale-105 md:text-base"
             >
               Enquire Now
             </button>

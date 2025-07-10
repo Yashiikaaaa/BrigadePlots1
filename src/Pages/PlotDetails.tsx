@@ -26,7 +26,7 @@ export default function PlotDetailsPage({ openModal }: PlotDetailsProp) {
   return (
     <div id="floorplan" className="bg-[#f2fbe7] w-full py-10 px-10 flex flex-col items-center md:items-start z-10 scroll-mt-16">
       {/* Section Heading */}
-      <h2 className="text-[#26650B] font-semibold text-base md:text-xl border-3 border-[#26650B] px-8 py-1 mx-10 rounded-full mb-6">
+      <h2 className="text-[#26650B] font-semibold text-base md:text-xl border-3 border-[#26650B] px-8 py-1 mx-10 rounded-full mb-6 whitespace-nowrap">
         PLOT DETAILS
       </h2>
 
@@ -50,7 +50,7 @@ export default function PlotDetailsPage({ openModal }: PlotDetailsProp) {
             <div className="absolute inset-0 flex items-center justify-center">
               <button
                 onClick={openModal}
-                className="bg-[#26650B] text-white text-sm px-5 py-2 rounded-lg font-medium cursor-pointer transition-transform duration-300 hover:scale-105"
+                className="bg-[#26650B] text-white text-sm px-5 py-2 rounded-lg font-medium cursor-pointer transition-transform duration-300 hover:scale-105 md:text-base"
               >
                 Get Plot Plan
               </button>

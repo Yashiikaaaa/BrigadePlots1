@@ -32,7 +32,7 @@ const Footer: React.FC<FooterProps> = ({ openModal }) => {
       {/* Green Call Banner */}
       <a
         href="tel:+918123130034"
-        className="bg-[#26650B] py-5 px-6 md:py-3 flex items-center justify-center md:justify-end gap-3 md:gap-5 md:absolute md:top-10 md:right-0 md:w-auto cursor-pointer"
+        className="bg-[#26650B] py-5 mb-12 md:mb-0 px-6 md:py-3 flex items-center justify-center md:justify-end gap-3 md:gap-5 md:absolute md:top-10 md:right-0 md:w-auto cursor-pointer"
       >
         <div className="rounded-full">
           <img src={phoneIcon} alt="Phone" className="w-7 h-7 md:w-8 md:h-8" />
